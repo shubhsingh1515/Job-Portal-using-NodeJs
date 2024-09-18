@@ -84,11 +84,14 @@ export const deleteJobController = async (req, res, next) => {
 
 export const jobStatsController = async (req, res) => {
   try {
+    const totalJobs = await jobsModel.countDocuments({
+        createdBy: new mongoose.Types.ObjectId(req.user._id),
+      });
 
     const stats = await jobsModel.aggregate([
       {
         $match: {
-          createdBy: new mongoose.Types.ObjectId(req.user.userId),
+          createdBy: new mongoose.Types.ObjectId(req.user._id),
         },
       },
       {
@@ -112,7 +115,7 @@ export const jobStatsController = async (req, res) => {
     let monthlyApplication = await jobsModel.aggregate([
       {
         $match: {
-          createdBy: new mongoose.Types.ObjectId(req.user.userId),
+          createdBy: new mongoose.Types.ObjectId(req.user._id),
         },
       },
       {
@@ -141,7 +144,7 @@ export const jobStatsController = async (req, res) => {
       .reverse();
 
     res.status(200).json({
-      totalJobs: stats.length,
+      totalJobs,
       defaultStats,
       monthlyApplication,
     });
