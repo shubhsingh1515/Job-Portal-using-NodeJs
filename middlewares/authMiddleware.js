@@ -18,10 +18,10 @@ const userAuth = async (req, res, next) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    next(); // Continue to the next middleware if everything is fine
+    next();
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    return res.status(401).json({ message: error.message || 'Invalid token' }); // Return a meaningful error message
+    console.error(error); 
+    return res.status(401).json({ message: error.message || 'Invalid token' });
   }
 };
 
